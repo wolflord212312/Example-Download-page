@@ -7,13 +7,13 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body {
-            background-color: #f0f0f0; /* Default background color */
+            background-color: #f0f0f0;
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
-            transition: background-color 0.3s ease; /* Smooth transition for background color change */
+            transition: background-color 0.3s ease;
         }
 
         #downloadContainer {
@@ -21,7 +21,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease; /* Smooth transition for background color change */
+            transition: background-color 0.3s ease;
         }
 
         table {
@@ -32,14 +32,14 @@
 
         th, td {
             border: 1px solid #dddddd;
-            text-align: center; /* Center text in cells */
+            text-align: center;
             padding: 8px;
-            transition: color 0.3s ease; /* Smooth transition for text color change */
+            transition: color 0.3s ease;
         }
 
         th {
             background-color: #f2f2f2;
-            color: black; /* Text color for light mode */
+            color: black;
         }
 
         .pagination {
@@ -59,7 +59,6 @@
             justify-content: center;
         }
 
-        /* Dark mode styles */
         body.dark-mode {
             background-color: #121212;
         }
@@ -75,15 +74,20 @@
 
         th.dark-mode, td.dark-mode {
             border: 1px solid #555;
-            color: white; /* Text color for dark mode */
+            color: white;
         }
 
         th.dark-mode {
-            background-color: #1f1f1f; /* Dark background color for table headers in dark mode */
+            background-color: #1f1f1f;
         }
 
         .pageButton.dark-mode {
             color: white;
+        }
+
+        /* Add style for transition when page loads with dark mode */
+        body.transition {
+            transition: background-color 0.3s ease;
         }
     </style>
 </head>
@@ -91,27 +95,18 @@
     <div id="downloadContainer">
         <h1>Download Page</h1>
 
-        <!-- GitHub repository selection dropdown -->
         <label for="repoSelect">Select GitHub Repository:</label>
         <select id="repoSelect" onchange="changeRepository()">
-	    //Hybrids -Start
             <option value="kettingpowered/Ketting-1-20-x">kettingpowered/Ketting-1-20-x</option>
             <option value="IzzelAliz/Arclight">IzzelAliz/Arclight</option>
-	    //Hybrids -End
-	    //Potato Mods - Start
             <option value="p0t4t0sandwich/TaterLib">p0t4t0sandwich/TaterLib</option>
             <option value="p0t4t0sandwich/TaterComms">p0t4t0sandwich/TaterComms</option>
             <option value="p0t4t0sandwich/TaterUtils">p0t4t0sandwich/TaterUtils</option>
             <option value="p0t4t0sandwich/BeeNameGeneratorPlugin">p0t4t0sandwich/BeeNameGeneratorPlugin</option> 
             <option value="p0t4t0sandwich/BadSpawns">p0t4t0sandwich/BadSpawns</option>
-	    //Potato Mods - End
-	    //adde0199 Mods/Plugins - Start
             <option value="adde0109/Ambassador">adde0109/Ambassador</option>
-	    //adde0199 Mods/Plugins - End
-            <!-- Add more options for other repositories as needed -->
         </select>
 
-        <!-- Build table -->
         <table>
             <thead>
                 <tr>
@@ -123,21 +118,16 @@
                 </tr>
             </thead>
             <tbody id="buildList">
-                <!-- Build items will be dynamically added here using JavaScript -->
             </tbody>
         </table>
 
-        <!-- Pagination -->
         <div class="pagination" id="pagination">
-            <!-- Page buttons will be dynamically added here using JavaScript -->
         </div>
 
-        <!-- Dark mode toggle button -->
         <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </div>
 
     <script>
-        // Dark mode toggle function
         function toggleDarkMode() {
             const body = document.body;
             const downloadContainer = document.getElementById("downloadContainer");
@@ -149,29 +139,29 @@
             downloadContainer.classList.toggle("dark-mode");
             table.classList.toggle("dark-mode");
 
-            // Toggle dark mode for th and td
             thAndTd.forEach(element => {
                 element.classList.toggle("dark-mode");
             });
 
-            // Toggle dark mode for page buttons
             pageButtons.forEach(button => {
                 button.classList.toggle("dark-mode");
             });
+
+            // Save dark mode preference to local storage
+            const isDarkMode = body.classList.contains("dark-mode");
+            localStorage.setItem("darkMode", isDarkMode);
         }
-        // Default repository
+
         let currentRepository = 'kettingpowered/Ketting-1-20-x';
 
-        const itemsPerPage = 9; // Number of items per page
+        const itemsPerPage = 9;
 
-        // Function to change the selected GitHub repository
         function changeRepository() {
             const repoSelect = document.getElementById("repoSelect");
             currentRepository = repoSelect.value;
-            fetchBuilds(1); // Fetch builds for the selected repository on change
+            fetchBuilds(1);
         }
 
-        // Function to fetch builds from a GitHub repository
         async function fetchBuilds(page) {
             try {
                 const [owner, repo] = currentRepository.split('/');
@@ -180,7 +170,6 @@
 
                 console.log('Releases:', releases);
 
-                // Extract relevant information from releases with jar files
                 const builds = releases
                     .filter(release => release.assets.some(asset => asset.name.endsWith('.jar')))
                     .flatMap(release => {
@@ -202,31 +191,24 @@
                             let buildNumber;
 
                             if (currentRepository === 'kettingpowered/Ketting-1-20-x') {
-                                // Ketting repository naming convention
                                 jarFileName = asset.name;
                                 mcVersion = extractMCVersion(jarFileName);
                                 buildNumber = jarFileName.split('-')[3];
                             } else if (currentRepository === 'IzzelAliz/Arclight') {
-                                // Arclight repository naming convention
                                 jarFileName = asset.name;
                                 mcVersion = extractMCVersion(jarFileName);
-                                buildNumber = release.name; // Use release name as Build Number for
+                                buildNumber = release.name;
                             } else if (currentRepository === 'Arclightadde0109/Ambassador') {
-                                // Arclight repository naming convention
                                 jarFileName = asset.name;
                                 mcVersion = extractMCVersion(jarFileName);
-                                buildNumber = release.name; // Use release name as Build Number for Arclightadde0109/Ambassador
+                                buildNumber = release.name;
                             } else {
-                                // For other repositories (replace this with the actual repository name)
                                 jarFileName = asset.name;
 
-                                // Check if the jar file name contains banned words
                                 if (containsBannedWords(jarFileName)) {
-                                    // Skip this build if it contains banned words
                                     return null;
                                 }
 
-                                // Extract MC version and build number
                                 const fileNameParts = jarFileName.split('-');
                                 mcVersion = extractMCVersion(jarFileName);
                                 buildNumber = release.name; 
@@ -245,82 +227,72 @@
 
                 console.log('Builds:', builds);
 
-                // Display builds for the current page
                 displayBuilds(builds.slice((page - 1) * itemsPerPage, page * itemsPerPage));
-
-                // Display pagination
                 displayPagination(builds.length, page);
             } catch (error) {
                 console.error('Error fetching builds:', error);
             }
         }
 
-        // Function to check if the jar file name contains banned words
         function containsBannedWords(fileName) {
             const bannedWords = ['bungee', 'bukkit', 'common', 'velocity'];
             return bannedWords.some(word => fileName.toLowerCase().includes(word));
         }
 
-	// Function to extract MC version from file name parts
-	function extractMCVersion(fileName) {
-    	   const validMCVersions = [
-    				'1.12.2',
-        			'1.13.1',
-        			'1.13.2',
-        			'1.14.1',
-        			'1.14.2',
-        			'1.14.3',
-        			'1.14.4',
-        			'1.15.1',
-        			'1.15.2',
-        			'1.16.1',
-        			'1.16.2',
-        			'1.16.3',
-       			 	'1.16.4',
-        			'1.16.5',
-        			'1.17.1',
-        			'1.18.1',
-        			'1.18.2',
-        			'1.19.1',
-        			'1.19.2',
-        			'1.19.3',
-        			'1.19.4',
-        			'1.20.1',
-        			'1.20.2',
-       			 	'1.20.3',
-        			'1.20.4',
-				'1.20',
-				'1.19',
-        			'1.18',
-        			'1.17',
-        			'1.16',
-        			'1.15',
-        			'1.14',
-        			'1.13',
-        			'1.12',
-        			'1.11',
-    				];
+        function extractMCVersion(fileName) {
+            const validMCVersions = [
+                '1.12.2',
+                '1.13.1',
+                '1.13.2',
+                '1.14.1',
+                '1.14.2',
+                '1.14.3',
+                '1.14.4',
+                '1.15.1',
+                '1.15.2',
+                '1.16.1',
+                '1.16.2',
+                '1.16.3',
+                '1.16.4',
+                '1.16.5',
+                '1.17.1',
+                '1.18.1',
+                '1.18.2',
+                '1.19.1',
+                '1.19.2',
+                '1.19.3',
+                '1.19.4',
+                '1.20.1',
+                '1.20.2',
+                '1.20.3',
+                '1.20.4',
+                '1.20',
+                '1.19',
+                '1.18',
+                '1.17',
+                '1.16',
+                '1.15',
+                '1.14',
+                '1.13',
+                '1.12',
+                '1.11',
+            ];
 
+            const fileNameLowerCase = fileName.toLowerCase();
 
-    	const fileNameLowerCase = fileName.toLowerCase();
+            for (const version of validMCVersions) {
+                if (fileNameLowerCase.includes(version)) {
+                    return version;
+                }
+            }
+            return 'N/A';
+        }
 
-    	for (const version of validMCVersions) {
-        	if (fileNameLowerCase.includes(version)) {
-           	 	return version;
-        	}
-   	 }return 'N/A'; // Return 'N/A' if no valid MC version is found}
-}
-    	
-	
-
-        // Function to dynamically display builds
         function displayBuilds(builds) {
             const buildList = document.getElementById("buildList");
 
-            // Clear existing table rows
             buildList.innerHTML = "";
 
-            // Display each build in the table
             builds.forEach(build => {
                 if (build) {
                     const row = document.createElement("tr");
@@ -334,15 +306,12 @@
             });
         }
 
-        // Function to dynamically display pagination
         function displayPagination(totalItems, currentPage) {
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             const paginationContainer = document.getElementById("pagination");
 
-            // Clear existing page buttons
             paginationContainer.innerHTML = "";
 
-            // Display page buttons
             for (let i = 1; i <= totalPages; i++) {
                 const button = document.createElement("span");
                 button.className = "pageButton";
@@ -355,13 +324,19 @@
             }
         }
 
-        // Set default value for repository selection on page load
         window.onload = function () {
             const repoSelect = document.getElementById("repoSelect");
             repoSelect.value = currentRepository;
+
+            const isDarkMode = localStorage.getItem("darkMode") === "true";
+
+            if (isDarkMode) {
+                document.body.classList.add("dark-mode");
+            }
+
+            document.body.classList.add("transition");
         };
 
-        // Initial fetch of builds (start with page 1)
         fetchBuilds(1);
     </script>
 </body>
