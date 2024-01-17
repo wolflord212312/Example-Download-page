@@ -6,95 +6,26 @@
     <title>Download Page</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        body {
-            background-color: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            transition: background-color 0.3s ease;
-        }
-
-        #downloadContainer {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: center;
-            padding: 8px;
-            transition: color 0.3s ease;
-        }
-
-        th {
-            background-color: #f2f2f2;
-            color: black;
-        }
-
-        .pagination {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .pageButton {
-            margin: 0 5px;
-            cursor: pointer;
-        }
-
-        .download-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        body.dark-mode {
-            background-color: #121212;
-        }
-
-        #downloadContainer.dark-mode {
-            background-color: #333;
-            color: white;
-        }
-
-        table.dark-mode {
-            border: 1px solid #555;
-        }
-
-        th.dark-mode, td.dark-mode {
-            border: 1px solid #555;
-            color: white;
-        }
-
-        th.dark-mode {
-            background-color: #1f1f1f;
-        }
-
-        .pageButton.dark-mode {
-            color: white;
-        }
-
-        /* Add style for transition when page loads with dark mode */
-        body.transition {
-            transition: background-color 0.3s ease;
-        }
+        body {background-color: #f0f0f0;display: flex;align-items: center;justify-content: center;height: 100vh;margin: 0;transition: background-color 0.3s ease;}
+        #downloadContainer {background-color: white;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);transition: background-color 0.3s ease;}
+        table {width: 100%;border-collapse: collapse;margin-top: 20px;}
+        th, td {border: 1px solid #dddddd;text-align: center;padding: 8px;transition: color 0.3s ease;}
+        th {background-color: #f2f2f2;color: black;}
+        .pagination {margin-top: 20px;display: flex;justify-content: center;}
+        .pageButton {margin: 0 5px;cursor: pointer;}
+        .download-icon {display: flex;align-items: center;justify-content: center;}
+        body.dark-mode {background-color: #121212;}
+        #downloadContainer.dark-mode {background-color: #333;color: white;}
+        table.dark-mode {border: 1px solid #555;}
+        th.dark-mode, td.dark-mode {border: 1px solid #555;color: white;}
+        th.dark-mode {background-color: #1f1f1f;}
+        .pageButton.dark-mode {color: white;}
+        body.transition {transition: background-color 0.3s ease;}
     </style>
 </head>
 <body>
     <div id="downloadContainer">
         <h1>Download Page</h1>
-
         <label for="repoSelect">Select GitHub Repository:</label>
         <select id="repoSelect" onchange="changeRepository()">
             <option value="kettingpowered/Ketting-1-20-x">kettingpowered/Ketting-1-20-x</option>
@@ -106,7 +37,6 @@
             <option value="p0t4t0sandwich/BadSpawns">p0t4t0sandwich/BadSpawns</option>
             <option value="adde0109/Ambassador">adde0109/Ambassador</option>
         </select>
-
         <table>
             <thead>
                 <tr>
@@ -117,13 +47,9 @@
                     <th>Downloads</th>
                 </tr>
             </thead>
-            <tbody id="buildList">
-            </tbody>
+            <tbody id="buildList"></tbody>
         </table>
-
-        <div class="pagination" id="pagination">
-        </div>
-
+        <div class="pagination" id="pagination"></div>
         <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </div>
 
@@ -147,13 +73,11 @@
                 button.classList.toggle("dark-mode");
             });
 
-            // Save dark mode preference to local storage
             const isDarkMode = body.classList.contains("dark-mode");
             localStorage.setItem("darkMode", isDarkMode);
         }
 
         let currentRepository = 'kettingpowered/Ketting-1-20-x';
-
         const itemsPerPage = 9;
 
         function changeRepository() {
@@ -167,8 +91,6 @@
                 const [owner, repo] = currentRepository.split('/');
                 const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/releases`);
                 const releases = await response.json();
-
-                console.log('Releases:', releases);
 
                 const builds = releases
                     .filter(release => release.assets.some(asset => asset.name.endsWith('.jar')))
@@ -209,7 +131,6 @@
                                     return null;
                                 }
 
-                                const fileNameParts = jarFileName.split('-');
                                 mcVersion = extractMCVersion(jarFileName);
                                 buildNumber = release.name; 
                             }
@@ -223,9 +144,8 @@
                                 downloadLink: asset.browser_download_url
                             };
                         });
-                    });
-
-                console.log('Builds:', builds);
+                    })
+                    .filter(build => build !== null);
 
                 displayBuilds(builds.slice((page - 1) * itemsPerPage, page * itemsPerPage));
                 displayPagination(builds.length, page);
@@ -241,41 +161,11 @@
 
         function extractMCVersion(fileName) {
             const validMCVersions = [
-                '1.12.2',
-                '1.13.1',
-                '1.13.2',
-                '1.14.1',
-                '1.14.2',
-                '1.14.3',
-                '1.14.4',
-                '1.15.1',
-                '1.15.2',
-                '1.16.1',
-                '1.16.2',
-                '1.16.3',
-                '1.16.4',
-                '1.16.5',
-                '1.17.1',
-                '1.18.1',
-                '1.18.2',
-                '1.19.1',
-                '1.19.2',
-                '1.19.3',
-                '1.19.4',
-                '1.20.1',
-                '1.20.2',
-                '1.20.3',
-                '1.20.4',
-                '1.20',
-                '1.19',
-                '1.18',
-                '1.17',
-                '1.16',
-                '1.15',
-                '1.14',
-                '1.13',
-                '1.12',
-                '1.11',
+                '1.12.2', '1.13.1', '1.13.2', '1.14.1', '1.14.2', '1.14.3', '1.14.4',
+                '1.15.1', '1.15.2', '1.16.1', '1.16.2', '1.16.3', '1.16.4', '1.16.5',
+                '1.17.1', '1.18.1', '1.18.2', '1.19.1', '1.19.2', '1.19.3', '1.19.4',
+                '1.20.1', '1.20.2', '1.20.3', '1.20.4', '1.20', '1.19', '1.18', '1.17',
+                '1.16', '1.15', '1.14', '1.13', '1.12', '1.11',
             ];
 
             const fileNameLowerCase = fileName.toLowerCase();
@@ -294,15 +184,13 @@
             buildList.innerHTML = "";
 
             builds.forEach(build => {
-                if (build) {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `<td>${build.jarName}</td>
-                                     <td>${build.date}</td>
-                                     <td>${build.mcVersion}</td>
-                                     <td>${build.buildNumber}</td>
-                                     <td class="download-icon">${build.downloadLink ? `<a href="${build.downloadLink}" download><span class="material-icons">download</span></a>` : 'N/A'}</td>`;
-                    buildList.appendChild(row);
-                }
+                const row = document.createElement("tr");
+                row.innerHTML = `<td>${build.jarName}</td>
+                                 <td>${build.date}</td>
+                                 <td>${build.mcVersion}</td>
+                                 <td>${build.buildNumber}</td>
+                                 <td class="download-icon">${build.downloadLink ? `<a href="${build.downloadLink}" download><span class="material-icons">download</span></a>` : 'N/A'}</td>`;
+                buildList.appendChild(row);
             });
         }
 
