@@ -6,21 +6,58 @@
     <title>Download Page</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        body {background-color: #f0f0f0;display: flex;align-items: center;justify-content: center;height: 100vh;margin: 0;transition: background-color 0.3s ease;}
-        #downloadContainer {background-color: white;padding: 20px;border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);transition: background-color 0.3s ease;}
-        table {width: 100%;border-collapse: collapse;margin-top: 20px;}
-        th, td {border: 1px solid #dddddd;text-align: center;padding: 8px;transition: color 0.3s ease;}
-        th {background-color: #f2f2f2;color: black;}
-        .pagination {margin-top: 20px;display: flex;justify-content: center;}
-        .pageButton {margin: 0 5px;cursor: pointer;}
-        .download-icon {display: flex;align-items: center;justify-content: center;}
-        body.dark-mode {background-color: #121212;}
-        #downloadContainer.dark-mode {background-color: #333;color: white;}
-        table.dark-mode {border: 1px solid #555;}
-        th.dark-mode, td.dark-mode {border: 1px solid #555;color: white;}
-        th.dark-mode {background-color: #1f1f1f;}
-        .pageButton.dark-mode {color: white;}
-        body.transition {transition: background-color 0.3s ease;}
+        body {
+            background-color: #121212; 
+            color: white; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color 0.3s ease, color 0.3s ease; 
+        }
+
+        #downloadContainer {
+            background-color: #333; 
+            color: white; 
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #555;
+            text-align: center;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #1f1f1f; 
+        }
+
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .pageButton {
+            margin: 0 5px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .download-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -33,7 +70,7 @@
             <option value="p0t4t0sandwich/TaterLib">p0t4t0sandwich/TaterLib</option>
             <option value="p0t4t0sandwich/TaterComms">p0t4t0sandwich/TaterComms</option>
             <option value="p0t4t0sandwich/TaterUtils">p0t4t0sandwich/TaterUtils</option>
-            <option value="p0t4t0sandwich/BeeNameGeneratorPlugin">p0t4t0sandwich/BeeNameGeneratorPlugin</option> 
+            <option value="p0t4t0sandwich/BeeNameGeneratorPlugin">p0t4t0sandwich/BeeNameGeneratorPlugin</option>
             <option value="p0t4t0sandwich/BadSpawns">p0t4t0sandwich/BadSpawns</option>
             <option value="adde0109/Ambassador">adde0109/Ambassador</option>
         </select>
@@ -50,31 +87,10 @@
             <tbody id="buildList"></tbody>
         </table>
         <div class="pagination" id="pagination"></div>
-        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </div>
-
     <script>
         function toggleDarkMode() {
-            const body = document.body;
-            const downloadContainer = document.getElementById("downloadContainer");
-            const table = document.querySelector("table");
-            const thAndTd = document.querySelectorAll("th, td");
-            const pageButtons = document.querySelectorAll(".pageButton");
-
-            body.classList.toggle("dark-mode");
-            downloadContainer.classList.toggle("dark-mode");
-            table.classList.toggle("dark-mode");
-
-            thAndTd.forEach(element => {
-                element.classList.toggle("dark-mode");
-            });
-
-            pageButtons.forEach(button => {
-                button.classList.toggle("dark-mode");
-            });
-
-            const isDarkMode = body.classList.contains("dark-mode");
-            localStorage.setItem("darkMode", isDarkMode);
+            document.body.classList.toggle("dark-mode");
         }
 
         let currentRepository = 'kettingpowered/Ketting-1-20-x';
@@ -132,7 +148,7 @@
                                 }
 
                                 mcVersion = extractMCVersion(jarFileName);
-                                buildNumber = release.name; 
+                                buildNumber = release.name;
                             }
 
                             return {
@@ -215,14 +231,6 @@
         window.onload = function () {
             const repoSelect = document.getElementById("repoSelect");
             repoSelect.value = currentRepository;
-
-            const isDarkMode = localStorage.getItem("darkMode") === "true";
-
-            if (isDarkMode) {
-                document.body.classList.add("dark-mode");
-            }
-
-            document.body.classList.add("transition");
         };
 
         fetchBuilds(1);
