@@ -131,6 +131,9 @@
                             if (currentRepository === 'kettingpowered/kettinglauncher') {
                                 jarFileName = asset.name;
                                 mcVersion = "1.20.*";
+                                if (containsBannedWords(jarFileName)) {
+                                    return null;
+                                }
                                 buildNumber = jarFileName.split('-')[3];
                             } else if (currentRepository === 'IzzelAliz/Arclight') {
                                 jarFileName = asset.name;
@@ -171,7 +174,7 @@
         }
 
         function containsBannedWords(fileName) {
-            const bannedWords = ['bungee', 'bukkit', 'common', 'velocity'];
+            const bannedWords = ['bungee', 'bukkit', 'common', 'velocity', 'sources'];
             return bannedWords.some(word => fileName.toLowerCase().includes(word));
         }
 
