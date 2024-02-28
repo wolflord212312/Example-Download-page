@@ -65,7 +65,7 @@
         <h1>Download Page</h1>
         <label for="repoSelect">Select GitHub Repository:</label>
         <select id="repoSelect" onchange="changeRepository()">
-            <option value="kettingpowered/Ketting-1-20-x">kettingpowered/Ketting-1-20-x</option>
+            <option value="kettingpowered/kettinglauncher">kettingpowered/kettinglauncher</option>
             <option value="IzzelAliz/Arclight">IzzelAliz/Arclight</option>
             <option value="p0t4t0sandwich/TaterLib">p0t4t0sandwich/TaterLib</option>
             <option value="p0t4t0sandwich/TaterComms">p0t4t0sandwich/TaterComms</option>
@@ -128,7 +128,7 @@
                             let mcVersion;
                             let buildNumber;
 
-                            if (currentRepository === 'kettingpowered/Ketting-1-20-x') {
+                            if (currentRepository === 'kettingpowered/kettinglauncher') {
                                 jarFileName = asset.name;
                                 mcVersion = extractMCVersion(jarFileName);
                                 buildNumber = jarFileName.split('-')[3];
