@@ -131,7 +131,7 @@
                             if (currentRepository === 'kettingpowered/kettinglauncher') {
                                 jarFileName = asset.name;
                                 mcVersion = "1.20.*";
-                                buildNumber = jarFileName.split('V')[3];
+                                buildNumber = jarFileName.split('-')[3];
                             } else if (currentRepository === 'IzzelAliz/Arclight') {
                                 jarFileName = asset.name;
                                 mcVersion = extractMCVersion(jarFileName);
